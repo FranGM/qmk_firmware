@@ -16,6 +16,32 @@
 
 #include QMK_KEYBOARD_H
 #include "muse.h"
+#include "process_unicode.h"
+
+enum {
+	TD_SHIFT_CAPS = 0
+};
+
+//Tap Dance Definitions
+qk_tap_dance_action_t tap_dance_actions[] = {
+	//Tap once for Esc, twice for Caps Lock
+	[TD_SHIFT_CAPS]  = ACTION_TAP_DANCE_DOUBLE(KC_LSFT, KC_CAPS)
+};
+
+
+enum unicode_names {
+	THINKING,
+	WEARY,
+	EYES,
+	SHRUG
+};
+
+const uint32_t PROGMEM unicode_map[] = {
+	[THINKING] = 0x1F914 , // 🤔
+	[WEARY] = 0x1F629,  // 😩
+	[EYES] = 0x1F440, // 👀
+	[SHRUG] = 0x1F937 // 🤷
+};
 
 enum preonic_layers {
   _QWERTY,
@@ -52,11 +78,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * `-----------------------------------------------------------------------------------'
  */
 [_QWERTY] = LAYOUT_preonic_grid( \
-  KC_GRV,          KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,            KC_BSPC, \
-  KC_TAB,          KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,            KC_DEL,  \
-  LCTL_T(KC_ESC),  KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN,         KC_QUOT, \
-  KC_LSFT,         KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  LSFT_T(KC_SLSH), KC_SFTENT,  \
-  TT(_NUMPAD),     KC_LCTL, KC_LALT, KC_LGUI, LOWER,   KC_SPC,  KC_SPC,  RAISE,   KC_LEFT, KC_DOWN, KC_UP,           KC_RGHT  \
+  KC_GRV,            KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,            KC_BSPC, \
+  KC_TAB,            KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,            KC_DEL,  \
+  LCTL_T(KC_ESC),    KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN,         KC_QUOT, \
+  TD(TD_SHIFT_CAPS), KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  LSFT_T(KC_SLSH), KC_SFTENT,  \
+  TT(_NUMPAD),       KC_LCTL, KC_LALT, KC_LGUI, LOWER,   KC_SPC,  KC_SPC,  RAISE,   KC_LEFT, KC_DOWN, KC_UP,           KC_RGHT  \
 ),
 
 /* Colemak
@@ -168,24 +194,28 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * ,-----------------------------------------------------------------------------------.
  * |      |   ✗  |   ✗  |   ✗  |   ✗  |   ✗  |   ✗  |   ✗  |   /  |   *  |   -  |      |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
- * |      |   ✗  | Home |  Up  |  End | PgUp |   ✗  |   7  |   8  |   9  |   +  |      |
+ * |      |  😩  | Home |  🤷  |  😩  | PgUp |   ✗  |   7  |   8  |   9  |   +  |      |
  * |------+------+------+------+------+-------------+------+------+------+------+------|
- * |      |   ✗  | Left | Down | Right| PgDn |   ✗  |   4  |   5  |   6  |   +  |   ✗  |
+ * |      |  🤔  | Left | Down |  🤔  | PgDn |   ✗  |   4  |   5  |   6  |   +  |   ✗  |
  * |------+------+------+------+------+------|------+------+------+------+------+------|
- * |      |   /  |   *  |   -  |   +  | Enter|   ✗  |   1  |   2  |   3  | Enter| Enter|
+ * |      |  👀  |   *  |   -  |  👀  | Enter|   ✗  |   1  |   2  |   3  | Enter| Enter|
  * |------+------+------+------+------+------+------+------+------+------+------+------|
  * |      |      |      |      |   ✗  |             |   0  |   0  |   .  | Enter|   =  |
  * `-----------------------------------------------------------------------------------'
  */
 [_NUMPAD] = LAYOUT_preonic_1x2uC( \
-  _______, KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO, KC_PSLS, KC_PAST, KC_PMNS, _______, \
-  _______, KC_NO,   KC_HOME, KC_UP,   KC_END,  KC_PGUP, KC_NO,   KC_P7, KC_P8,   KC_P9,   KC_PPLS, _______, \
-  _______, KC_NO,   KC_LEFT, KC_DOWN, KC_RGHT, KC_PGDN, KC_NO,   KC_P4, KC_P5,   KC_P6,   KC_PPLS, KC_NO,   \
-  _______, KC_PSLS, KC_PAST, KC_PMNS, KC_PPLS, KC_PENT, KC_NO,   KC_P1, KC_P2,   KC_P3,   KC_PENT, KC_PENT, \
-  _______, _______, _______, _______, KC_NO,       _______,      KC_P0, KC_P0,   KC_PDOT, KC_PENT, KC_PEQL  \
+  _______, KC_NO,         KC_NO,    KC_NO,    KC_NO,       KC_NO,   KC_NO,   KC_NO, KC_PSLS, KC_PAST, KC_PMNS, _______, \
+  _______, X(WEARY),      KC_NO,    X(SHRUG), X(WEARY),    KC_PGUP, KC_NO,   KC_P7, KC_P8,   KC_P9,   KC_PPLS, _______, \
+  _______, X(THINKING),   KC_LEFT,  KC_DOWN,  X(THINKING), KC_PGDN, KC_NO,   KC_P4, KC_P5,   KC_P6,   KC_PPLS, KC_NO,   \
+  _______, X(EYES),       KC_PAST,  KC_PMNS,  X(EYES),     KC_PENT, KC_NO,   KC_P1, KC_P2,   KC_P3,   KC_PENT, KC_PENT, \
+  _______, _______,       _______,  _______,  KC_NO,       _______,      KC_P0, KC_P0,   KC_PDOT, KC_PENT, KC_PEQL  \
 )
 
 };
+
+void matrix_init_user(void) {
+	set_unicode_input_mode(UC_OSX);
+}
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   switch (keycode) {
