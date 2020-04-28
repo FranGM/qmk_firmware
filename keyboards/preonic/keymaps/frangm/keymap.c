@@ -33,14 +33,21 @@ enum unicode_names {
 	THINKING,
 	WEARY,
 	EYES,
-	SHRUG
+	SHRUG,
+	HEART,
+	FIRE,
+	BUSINESS
 };
 
 const uint32_t PROGMEM unicode_map[] = {
 	[THINKING] = 0x1F914 , // 🤔
 	[WEARY] = 0x1F629,  // 😩
 	[EYES] = 0x1F440, // 👀
-	[SHRUG] = 0x1F937 // 🤷
+	[SHRUG] = 0x1F937, // 🤷
+	[HEART] = 0x1f496, // 💖
+	[FIRE] = 0x1f525, // 🔥
+	[BUSINESS] = 0x1f574 // 🕴️
+
 };
 
 enum preonic_layers {
@@ -194,21 +201,21 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * ,-----------------------------------------------------------------------------------.
  * |      |   ✗  |   ✗  |   ✗  |   ✗  |   ✗  |   ✗  |   ✗  |   /  |   *  |   -  |      |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
- * |      |  😩  | Home |  🤷  |  😩  | PgUp |   ✗  |   7  |   8  |   9  |   +  |      |
+ * |      |  😩  |  🕴️  |  🤷  |  😩  | PgUp |   ✗  |   7  |   8  |   9  |   +  |      |
  * |------+------+------+------+------+-------------+------+------+------+------+------|
- * |      |  🤔  | Left | Down |  🤔  | PgDn |   ✗  |   4  |   5  |   6  |   +  |   ✗  |
+ * |      |  🤔  | Left |  💖  |  🤔  | PgDn |   ✗  |   4  |   5  |   6  |   +  |   ✗  |
  * |------+------+------+------+------+------|------+------+------+------+------+------|
- * |      |  👀  |   *  |   -  |  👀  | Enter|   ✗  |   1  |   2  |   3  | Enter| Enter|
+ * |      |  👀  |   *  |  🔥  |  👀  | Enter|   ✗  |   1  |   2  |   3  | Enter| Enter|
  * |------+------+------+------+------+------+------+------+------+------+------+------|
  * |      |      |      |      |   ✗  |             |   0  |   0  |   .  | Enter|   =  |
  * `-----------------------------------------------------------------------------------'
  */
 [_NUMPAD] = LAYOUT_preonic_1x2uC( \
   _______, KC_NO,         KC_NO,    KC_NO,    KC_NO,       KC_NO,   KC_NO,   KC_NO, KC_PSLS, KC_PAST, KC_PMNS, _______, \
-  _______, X(WEARY),      KC_NO,    X(SHRUG), X(WEARY),    KC_PGUP, KC_NO,   KC_P7, KC_P8,   KC_P9,   KC_PPLS, _______, \
-  _______, X(THINKING),   KC_LEFT,  KC_DOWN,  X(THINKING), KC_PGDN, KC_NO,   KC_P4, KC_P5,   KC_P6,   KC_PPLS, KC_NO,   \
-  _______, X(EYES),       KC_PAST,  KC_PMNS,  X(EYES),     KC_PENT, KC_NO,   KC_P1, KC_P2,   KC_P3,   KC_PENT, KC_PENT, \
-  _______, _______,       _______,  _______,  KC_NO,       _______,      KC_P0, KC_P0,   KC_PDOT, KC_PENT, KC_PEQL  \
+  _______, X(WEARY),      X(BUSINESS), X(SHRUG), X(WEARY),    KC_PGUP, KC_NO,   KC_P7, KC_P8,   KC_P9,   KC_PPLS, _______, \
+  _______, X(THINKING),   KC_LEFT,     X(HEART), X(THINKING), KC_PGDN, KC_NO,   KC_P4, KC_P5,   KC_P6,   KC_PPLS, KC_NO,   \
+  _______, X(EYES),       KC_PAST,     X(FIRE),  X(EYES),     KC_PENT, KC_NO,   KC_P1, KC_P2,   KC_P3,   KC_PENT, KC_PENT, \
+  _______, _______,       _______,     _______,  KC_NO,       _______,      KC_P0, KC_P0,   KC_PDOT, KC_PENT, KC_PEQL  \
 )
 
 };
